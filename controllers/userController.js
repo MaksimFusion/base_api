@@ -43,8 +43,32 @@ class UserController {
     }
 
     async check(req, res) {
-        const token = generateJwt(req.user.id, req.user.email)
-        return res.json({token})
+    }
+    async getUsers(req, res) {
+        const users = await User.findAll()
+        return res.json(users)
+    }
+    async getUser(req, res) {
+        const {id} = req.params
+        const user = await User.findByPk(id)
+        return res.json(user)
+    }
+    async updateUser(req, res) {
+        const user = req.body
+        const updatedUser = await  User.update( {
+                user
+            },
+            {
+                where: { id: req.body.id }
+            } )
+        return res.json(updatedUser)
+    }
+    async deleteUser(req, res) {
+        const user = await User.destroy({
+            where: {
+                id: req.params.id
+            }})
+        return res.json(user)
     }
 
 }
